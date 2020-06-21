@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="referrer" content="origin"><!-- NOTE: for Bing Maps -->
+<title>Reverse Geocoding</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+  integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+  crossorigin="">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+<style>
+body {
+  margin: 0;
+}
+#map {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+#crosshair {
+  position: absolute;
+  top: calc(50% - 12px);
+  left: calc(50% - 12px);
+  z-index: 1000;
+}
+.leaflet-bar button, .leaflet-bar button:hover {
+  font-size: 13px;
+}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="crosshair"><img src="crosshair.png" alt=""></div>
+<script src="https://polyfill.io/v3/polyfill.min.js?flags=gated%7Calways&amp;features=Promise%2Cfetch" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+  integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+  crossorigin=""></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+<script>
+const param = { lon: 139.765249, lat: 35.681552, zoom: 12 };
+location.search.slice(1).split('&').forEach(function (ma) {
+  const s = ma.split('=');
+  param[s[0]] = Number(s[1]);
+});
+
+const map = L.map('map', {
+  center: [param.lat, param.lon],
+  zoom: param.zoom
+});
+const std = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
+  attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html">地理院タイル</a>'
+}).addTo(map);
+
+const helloPopup = L.popup();
+L.easyButton('&target;', function(btn, map) {
+  const center = map.getCenter();
+  helloPopup.setLatLng(center);
+/* 農研機構 簡易逆ジオコーディングサービス
+  fetch('https://aginfo.cgk.affrc.go.jp/ws/rgeocode.php?json&lat=' + center.lat + '&lon=' + center.lng)
+    .then(function (response) { return response.json(); })
+    .then(function (json) {
+      const pname = json.result.prefecture.pname;
+      const mname = json.result.municipality.mname;
+      helloPopup.setContent(pname + mname).openOn(map);
+    });
+*/
+  fetch('https://map.jpn.org/share/rg.php?lat=' + center.lat + '&lon=' + center.lng)
+    .then(function (response) { return response.json(); })
+    .then(function (json) {
+      helloPopup.setContent(json.name).openOn(map);
+    });
+}).addTo(map);
+</script>
+</body>
+</html>
