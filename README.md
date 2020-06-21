@@ -50,7 +50,7 @@ CREATE TABLE gyosei (
  area GEOMETRY NOT NULL /*!80003 SRID 4326 */ COMMENT '範囲'
 );
 ```
-なお、MySQL8の場合は、areaフィールドにSRID 4326の設定が必要である（
+なお、MySQL8の場合は、areaフィールドにSRID 4326を設定する必要がある（
 https://dev.mysql.com/doc/refman/8.0/en/spatial-type-overview.html
 ）。
 
@@ -65,8 +65,8 @@ city.sqlとx_NNN.sqlの全てをSTEP 3.で作成したテーブルにインポ�
 ### STEP 5. インデックスの設定
 インデックスの作成はインポート後にまとめて行った方が、全体の処理時間が短縮される。
 ```
-ALTER TABLE city ADD PRIMARY KEY(code);
-ALTER TABLE gyosei ADD SPATIAL INDEX (area);
+ALTER TABLE city ADD PRIMARY KEY (code);
+ALTER TABLE gyosei ADD SPATIAL KEY (area);
 ```
 
 ### STEP 6. テスト
@@ -76,6 +76,8 @@ SET @lat=36.104638;
 SET @pt=ST_GeomFromText(CONCAT('POINT(',@lon,' ',@lat,')'),4326);
 SELECT code,name FROM gyosei LEFT JOIN city USING (code) WHERE ST_Contains(area,@pt) LIMIT 1;
 ```
+結果が 8220 茨城県つくば市 となればOK。
+
 注：MySQL8では、POINT中の@lonと@latの順番が入れ替わる（
 https://dev.mysql.com/doc/refman/8.0/en/gis-wkt-functions.html#function_st-geomfromtext
 ）。 
