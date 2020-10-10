@@ -21,19 +21,22 @@ https://map.jpn.org/share/rg.php?lat=緯度&lon=経度
 ## データベースの作成
 
 ### STEP 1. 入力データ（SQL）の入手
-作成済のデータ（[easy-rgeocode-jpn_200622.zip](https://map.jpn.org/share/easy-rgeocode-jpn_200622.zip)）も公開しているので、これを用いても良い。ダウンロードして適当なディレクトリで解凍すると、
+作成済のデータ（[easy-rgeocode-jpn_201010.zip](https://map.jpn.org/share/easy-rgeocode-jpn_201010.zip)）も公開しているので、これを用いても良い。ダウンロードして適当なディレクトリで解凍すると、
 * city.sql
-* x_NNN.sql（NNN = 000〜016 の連番）
+* x_NNN.sql（NNN = 000〜012 の連番）
 
 が得られる。
 
 ### STEP 2. 入力データ（SQL）の作成
 STEP 1.で作成済データを入手した場合は、次のSTEP 3.に進む。
 
-入力データ（SQL）は、[国土数値情報](https://nlftp.mlit.go.jp/)（行政区域）から、最新データ（2020-06-22現在、N03-190101_GML.zip）をダウンロードし、付属のスクリプトを用いて、次のコマンドで作成する。
+入力データ（SQL）は、[国土数値情報](https://nlftp.mlit.go.jp/)（行政区域）から、最新データ（2020-10-10現在、N03-200101_GML.zip）をダウンロードし、[geojsplit](https://github.com/woodb/geojsplit)と付属のスクリプトを用いて、次のコマンドで作成する。
 ```
 $ ./gensql_city.pl > city.sql
-$ unzip -p N03-190101_GML.zip '*.geojson' | ./gensql_gyosei.pl | ./bsplit.pl
+$ unzip N03-200101_GML.zip '*.geojson'
+$ mkdir -p temp
+$ geojsplit -v -l 6000 -o temp N03-20_200101.geojson
+$ ./geojson2sql.pl temp/*.geojson | ./bsplit.pl
 ```
 これにより、city.sqlとx_NNN.sqlが出力される。なお、各x_NNN.sqlは、ファイルサイズが32MBを超えないように分割して作成される。この上限はbsplit.pl内の定数で設定され、適宜変更ができる。
 
