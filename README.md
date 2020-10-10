@@ -30,7 +30,7 @@ https://map.jpn.org/share/rg.php?lat=緯度&lon=経度
 ### STEP 2. 入力データ（SQL）の作成
 STEP 1.で作成済データを入手した場合は、次のSTEP 3.に進む。
 
-入力データ（SQL）は、[国土数値情報](https://nlftp.mlit.go.jp/)（行政区域）から、最新データ（2020-10-10現在、N03-200101_GML.zip）をダウンロードし、[geojsplit](https://github.com/woodb/geojsplit)と付属のスクリプトを用いて、次のコマンドで作成する。
+入力データ（SQL）は、国土交通省の[国土数値情報](https://nlftp.mlit.go.jp/)から、GML(JPGIS2.1）シェープファイルで行政区域の全国の最新データ（2020-10-10現在、N03-200101_GML.zip）をダウンロードし、[geojsplit](https://github.com/woodb/geojsplit)と付属のスクリプトを用いて、次のコマンドで作成する。
 ```
 $ ./gensql_city.pl > city.sql
 $ unzip N03-200101_GML.zip '*.geojson'
