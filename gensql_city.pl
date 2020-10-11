@@ -17,7 +17,7 @@ my $codes = scraper {
 
 my $uri = URI->new('https://nlftp.mlit.go.jp/ksj/gml/codelist/AdminAreaCd.html');
 my $res = $codes->scrape($uri);
-$res->{codes}->[0] = { 'code' => 0, name => 'unknown' };
+$res->{codes}->[0] = { 'code' => 0, name => '所属未定地' };
 for my $code (@{$res->{codes}}) {
   print 'INSERT INTO `city` VALUES (', 0 + $code->{code}, q{,'}, $code->{name}, q{');}, "\n";
 }

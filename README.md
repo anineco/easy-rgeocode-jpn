@@ -92,11 +92,11 @@ https://dev.mysql.com/doc/refman/8.0/en/gis-wkt-functions.html#function_st-geomf
 
 gensql_city.pl が参照している行政区域コード（https://nlftp.mlit.go.jp/ksj/gml/codelist/AdminAreaCd.html）の情報が古く、最近の市政施行が反映されていない。次のSQLを実行してデータベースを修正する。
 ```
-UPDATE city SET code=3216,name='岩手県滝沢市' WHERE code=3305; # 岩手県岩手郡滝沢村
-UPDATE city SET code=4216,name='宮城県富谷市' WHERE code=4423; # 宮城県黒川郡富谷町
-UPDATE city SET code=11246,name='埼玉県白岡市' WHERE code=11445; # 埼玉県南埼玉郡白岡町
-UPDATE city SET code=12239,name='千葉県大網白里市' WHERE code=12402; # 千葉県山武郡大網白里町
-UPDATE city SET code=40231,name='福岡県那珂川市' WHERE code=40305; # 福岡県筑紫郡那珂川町
+UPDATE city SET code=3216,name='岩手県滝沢市' WHERE code=3305;
+UPDATE city SET code=4216,name='宮城県富谷市' WHERE code=4423;
+UPDATE city SET code=11246,name='埼玉県白岡市' WHERE code=11445;
+UPDATE city SET code=12239,name='千葉県大網白里市' WHERE code=12402;
+UPDATE city SET code=40231,name='福岡県那珂川市' WHERE code=40305;
 ```
 
 ## API用PHPの設置
