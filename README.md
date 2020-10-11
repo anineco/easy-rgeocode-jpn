@@ -90,7 +90,7 @@ https://dev.mysql.com/doc/refman/8.0/en/gis-wkt-functions.html#function_st-geomf
 
 ### STEP 7. データベースの修正（2020-10-11追記）
 
-gensql_city.pl が参照している行政区域コード（https://nlftp.mlit.go.jp/ksj/gml/codelist/AdminAreaCd.html）の情報が古く、最近の市政施行が反映されていない。次のSQLを実行してデータベースを修正する。
+gensql_city.pl が参照している[行政区域コード](https://nlftp.mlit.go.jp/ksj/gml/codelist/AdminAreaCd.html)の情報が古く、最近の市政施行が反映されていない。次のSQLを実行してデータベースを修正する。
 ```
 UPDATE city SET code=3216,name='岩手県滝沢市' WHERE code=3305;
 UPDATE city SET code=4216,name='宮城県富谷市' WHERE code=4423;
