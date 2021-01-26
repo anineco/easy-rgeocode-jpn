@@ -36,6 +36,6 @@ while ($row = $sth->fetch(PDO::FETCH_OBJ)) {
 }
 $sth = null;
 $output = array( 'code' => $code, 'name' => $name );
-header('Content-type: application/json');
+header('Content-type: application/json; charset=UTF-8');
 echo json_encode($output, JSON_UNESCAPED_UNICODE), PHP_EOL;
 $dbh = null;
