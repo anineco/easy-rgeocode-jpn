@@ -18,6 +18,8 @@ https://map.jpn.org/share/rg.php?lat=緯度&lon=経度
 * code: [行政コード](https://nlftp.mlit.go.jp/ksj/gml/codelist/AdminAreaCd.html)
 * name: 都道府県名＋市区町村名
 
+2022-02-01追記：行政コードは国土数値情報のサイトの[行政区域コード](https://nlftp.mlit.go.jp/ksj/gml/codelist/AdminiBoundary_CD.xlsx)で提供されるようになった。
+
 ## データベースの作成
 
 ### STEP 1. 入力データ（SQL）の入手
@@ -88,7 +90,7 @@ SELECT code,name FROM gyosei LEFT JOIN city USING (code) WHERE ST_Contains(area,
 https://dev.mysql.com/doc/refman/8.0/en/gis-wkt-functions.html#function_st-geomfromtext
 ）。 
 
-### STEP 7. データベースの修正（2020-10-11追記）
+### STEP 7. データベースの修正（2020-10-11追記、2022-02-01改訂）
 
 gensql_city.pl が参照している[行政区域コード](https://nlftp.mlit.go.jp/ksj/gml/codelist/AdminAreaCd.html)の情報が平成24年4月1日時点のもので古く、最近の市政施行が反映されていない。次のSQLを実行してデータベースを修正する。
 ```
@@ -97,6 +99,7 @@ UPDATE city SET code=4216,name='宮城県富谷市' WHERE code=4423;
 UPDATE city SET code=11246,name='埼玉県白岡市' WHERE code=11445;
 UPDATE city SET code=12239,name='千葉県大網白里市' WHERE code=12402;
 UPDATE city SET code=40231,name='福岡県那珂川市' WHERE code=40305;
+UPDATE city SET name='兵庫県丹波篠山市' WHERE code=28221;
 ```
 
 ## API用PHPの設置
