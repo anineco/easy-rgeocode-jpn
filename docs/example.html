@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <meta name="referrer" content="origin"><!-- NOTE: for Bing Maps -->
     <title>Reverse Geocoding</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
       crossorigin="">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
     <style>
@@ -35,8 +35,8 @@
     <div id="map"></div>
     <div id="crosshair"><img src="crosshair.png" alt=""></div>
     <script src="https://polyfill.io/v3/polyfill.min.js?flags=gated%7Calways&amp;features=Promise%2Cfetch" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-      integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
       crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
     <script>
@@ -46,16 +46,11 @@
         param[s[0]] = Number(s[1]);
       });
 
-      // FIXME: a workaround for https://github.com/Leaflet/Leaflet/issues/7255
-      const ua = navigator.userAgent.toLowerCase();
-      const safari = ua.indexOf('safari') >= 0 && ua.indexOf('chrome') < 0;
-
       const map = L.map('map', {
         center: [param.lat, param.lon],
         maxZoom: 18,
         minZoom: 5,
-        zoom: param.zoom,
-        tap: !safari
+        zoom: param.zoom
       });
       const std = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
         attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html">地理院タイル</a>'
