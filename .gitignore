@@ -35,3 +35,10 @@ inc/
 /*.zip
 /*.sh
 /attic
+
+# added by anineco
+/00readme.txt
+/AdminiBoundary_CD.xlsx
+/easy-rgeocode-jpn_*/
+/temp/
+/N03-*
