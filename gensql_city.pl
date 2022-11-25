@@ -16,9 +16,19 @@ my $codes = scraper {
 };
 
 my $uri = URI->new('https://nlftp.mlit.go.jp/ksj/gml/codelist/AdminAreaCd.html');
-my $res = $codes->scrape($uri);
-$res->{codes}->[0] = { 'code' => 0, name => '所属未定地' };
-for my $code (@{$res->{codes}}) {
-  print 'INSERT INTO `city` VALUES (', 0 + $code->{code}, q{,'}, $code->{name}, q{');}, "\n";
+my @codes = @{$codes->scrape($uri)->{codes}};
+shift(@codes);
+for my $code (@codes) {
+  print q{INSERT INTO `city` VALUES (}, 0 + $code->{code}, q{,'}, $code->{name}, q{');}, "\n";
 }
+#
+print <<EOS, "\n";
+INSERT INTO `city` VALUES (0,'所属未定地');
+INSERT INTO `city` VALUES (3216,'岩手県滝沢市');
+INSERT INTO `city` VALUES (4216,'宮城県富谷市');
+INSERT INTO `city` VALUES (11246,'埼玉県白岡市');
+INSERT INTO `city` VALUES (12239,'千葉県大網白里市');
+INSERT INTO `city` VALUES (40231,'福岡県那珂川市');
+UPDATE `city` SET name='兵庫県丹波篠山市' WHERE code=28221;
+EOS
 __END__
