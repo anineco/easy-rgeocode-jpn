@@ -13,8 +13,9 @@ foreach my $filename (@ARGV) {
   my $data = from_json($text);
   foreach my $feature (@{$data->{features}}) {
     my $code = $feature->{properties}->{N03_007} || 0; # 行政区域コード（null: 所属未定地）
-    print q/SET @area='{"type":"Polygon","coordinates":/, to_json($feature->{geometry}->{coordinates}), q/}';/;
-    print q/INSERT INTO `gyosei` VALUES (/, 0 + $code , q/,ST_GeomFromGeoJSON(@area,1));/, "\n";
+    next unless ($code > 0 || $feature->{properties}->{N03_004} eq '所属未定地');
+    print q/SET @area='/, to_json($feature->{geometry}), q/';/;
+    print q/INSERT INTO `gyosei` VALUES (/, 0 + $code, q/,ST_GeomFromGeoJSON(@area,1));/, "\n";
   }
 }
 __END__
