@@ -24,18 +24,20 @@ $sth->bindValue(2, $lat, PDO::PARAM_STR);
 $sth->execute();
 $sth = null;
 $sql = <<<'EOS'
-SELECT code,name FROM gyosei LEFT JOIN city USING (code) WHERE ST_Contains(area,@pt) LIMIT 1
+SELECT code,name,ST_AsGeoJSON(area,14) AS a FROM gyosei LEFT JOIN city USING (code) WHERE ST_Contains(area,@pt) LIMIT 1
 EOS;
 $sth = $dbh->prepare($sql);
 $sth->execute();
 $code = 0;
 $name = 'unknown';
+$area = '';
 while ($row = $sth->fetch(PDO::FETCH_OBJ)) {
   $code = $row->code;
   $name = $row->name;
+  $area = $row->a;
 }
 $sth = null;
-$output = array( 'code' => $code, 'name' => $name );
+$output = array( 'code' => $code, 'name' => $name, 'area' => $area );
 header('Content-type: application/json; charset=UTF-8');
 echo json_encode($output, JSON_UNESCAPED_UNICODE), PHP_EOL;
 $dbh = null;

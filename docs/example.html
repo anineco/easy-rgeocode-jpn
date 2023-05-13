@@ -57,6 +57,7 @@
       }).addTo(map);
 
       const helloPopup = L.popup();
+      const group = L.layerGroup().addTo(map);
 
       L.easyButton('&target;', function(btn, map) {
         const center = map.getCenter();
@@ -74,6 +75,19 @@
         .then(function (response) { return response.json(); })
         .then(function (json) {
           helloPopup.setContent(json.name).openOn(map);
+          if (json.area) {
+            group.clearLayers();
+            group.addLayer(L.geoJSON(JSON.parse('{"type":"FeatureCollection","features":[' + json.area + ']}'), {
+              style: {
+                color: '#ff0000',
+                weight: 1,
+                opacity: 0.5
+              }
+            }));
+            map.on('popupclose', function (event) {
+              group.clearLayers();
+            });
+          }
         });
       }).addTo(map);
     </script>
