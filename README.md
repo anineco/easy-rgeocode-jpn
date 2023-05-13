@@ -6,7 +6,7 @@ Setup MySQL for simple reverse geocoding in Japan using the digital national lan
 
 表示例：https://anineco.github.io/easy-rgeocode-jpn/example.html
 
-左上の[⌖]ボタンを押すと中央十字線の緯度、経度を読み取り、逆ジオコーディングを実行して所在地（都道府県＋市区町村）をポップアップ表示する。
+左上の[⌖]ボタンを押すと中央十字線の緯度、経度を読み取り、逆ジオコーディングを実行して所在地（都道府県＋市区町村）をポップアップ表示し、中央十字線の位置を含む領域を図示する。
 
 ## 逆ジオコーディングAPI（試験公開）
 ```
@@ -17,6 +17,7 @@ https://map.jpn.org/share/rg.php?lat=緯度&lon=経度
 緯度、経度は世界測地系（WGS84）で、度単位の10進数で与える。結果はJSON形式で返され、次のkey-valueからなる。
 * code: [行政区域コード](https://nlftp.mlit.go.jp/ksj/gml/codelist/AdminiBoundary_CD.xlsx)
 * name: 都道府県名＋市区町村名
+* area: 与えられた位置を含む領域のGeoJSON（"geometry"の値）
 
 ## データベースの作成
 
