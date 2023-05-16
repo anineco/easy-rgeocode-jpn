@@ -43,11 +43,13 @@ STEP 1.で作成済の入力データを入手した場合は、STEP 3.に進む
 ```
 pip3 install openpyxl
 ```
-gencsv_city.pyを用いてcity,csvを作成する。
+
+gencsv_city.pyを用いてcity.csvを作成する。
 ```
 ./gencsv_city.py > city.csv
 ```
-次に、以下のコマンドを実行して、x_NNN.sql ファイルを作成する。
+
+次に、[geojsplit](https://www.npmjs.com/package/geojsplit)をインストールし、以下のコマンドを実行して、x_NNN.sql ファイルを作成する。
 ```
 unzip N03-20220101_GML.zip '*.geojson'
 SOURCE=N03-22_220101.geojson
