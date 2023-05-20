@@ -9,14 +9,17 @@ $type = !empty($_POST) ? INPUT_POST : INPUT_GET;
 $lon = filter_input($type, 'lon');
 $lat = filter_input($type, 'lat');
 
+if ($cf['version'] >= 8) {
 # MySQL8
-$sql = <<<'EOS'
+  $sql = <<<'EOS'
 SET @pt=ST_GeomFromText(CONCAT('POINT(',?,' ',?,')'),4326,'axis-order=long-lat')
 EOS;
+} else {
 # MySQL5/MariaDB10
-#$sql = <<<'EOS'
-#SET @pt=ST_GeomFromText(CONCAT('POINT(',?,' ',?,')'),4326)
-#EOS;
+  $sql = <<<'EOS'
+SET @pt=ST_GeomFromText(CONCAT('POINT(',?,' ',?,')'),4326)
+EOS;
+}
 
 $sth = $dbh->prepare($sql);
 $sth->bindValue(1, $lon, PDO::PARAM_STR);
