@@ -24,7 +24,9 @@ $sth->bindValue(2, $lat, PDO::PARAM_STR);
 $sth->execute();
 $sth = null;
 $sql = <<<'EOS'
-SELECT code,name,ST_AsGeoJSON(area,14) AS a FROM gyosei LEFT JOIN city USING (code) WHERE ST_Contains(area,@pt) LIMIT 1
+SELECT code,name,ST_AsGeoJSON(area,14) AS a
+FROM gyosei JOIN city USING (code)
+WHERE ST_Contains(area,@pt) LIMIT 1
 EOS;
 $sth = $dbh->prepare($sql);
 $sth->execute();
