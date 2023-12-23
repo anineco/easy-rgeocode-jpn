@@ -1,25 +1,15 @@
 <?php
-require_once './init.php';
-$cf = set_init();
-$dsn = "mysql:dbname=$cf[database];host=$cf[host];charset=utf8mb4";
-#$dsn = "mysql:dbname=$cf[database];unix_socket=$cf[socket];charset=utf8mb4";
-
+$cf = parse_ini_file('/home/anineco/.my.cnf'); # 🔖 設定ファイル
+$dsn = "mysql:host=$cf[host];dbname=$cf[database];charset=utf8mb4";
 $dbh = new PDO($dsn, $cf['user'], $cf['password']);
+
 $type = !empty($_POST) ? INPUT_POST : INPUT_GET;
 $lon = filter_input($type, 'lon');
 $lat = filter_input($type, 'lat');
 
-if ($cf['version'] >= 8) {
-# MySQL8
-  $sql = <<<'EOS'
-SET @pt=ST_GeomFromText(CONCAT('POINT(',?,' ',?,')'),4326,'axis-order=long-lat')
+$sql = <<<'EOS'
+SET @pt=ST_GeomFromText(CONCAT('POINT(',?,' ',?,')'),4326/*!80003 ,'axis-order=long-lat' */)
 EOS;
-} else {
-# MySQL5/MariaDB10
-  $sql = <<<'EOS'
-SET @pt=ST_GeomFromText(CONCAT('POINT(',?,' ',?,')'),4326)
-EOS;
-}
 
 $sth = $dbh->prepare($sql);
 $sth->bindValue(1, $lon, PDO::PARAM_STR);
