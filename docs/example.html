@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <meta name="referrer" content="origin"><!-- NOTE: for Bing Maps -->
     <title>Reverse Geocoding</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin="">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
     <style>
@@ -47,9 +47,8 @@
   <body>
     <div id="map"></div>
     <div id="crosshair"><img src="crosshair.png" alt=""></div>
-    <script src="https://polyfill.io/v3/polyfill.min.js?flags=gated%7Calways&amp;features=Promise%2Cfetch" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
     <script>
@@ -75,36 +74,24 @@
       L.easyButton('&target;', function(btn, map) {
         const center = map.getCenter();
         helloPopup.setLatLng(center);
-/*****  農研機構 簡易逆ジオコーディングサービス
-        fetch('https://aginfo.cgk.affrc.go.jp/ws/rgeocode.php?json&lat=' + center.lat + '&lon=' + center.lng)
-        .then(function (response) { return response.json(); })
-        .then(function (json) {
-          const pname = json.result.prefecture.pname;
-          const mname = json.result.municipality.mname;
-          helloPopup.setContent(pname + mname).openOn(map);
-        });
-*****/
         fetch('https://map.jpn.org/share/rg.php?lat=' + center.lat + '&lon=' + center.lng)
-        .then(function (response) { return response.json(); })
-        .then(function (json) {
+        .then(response => response.json())
+        .then(json => {
           const html = '<h2>現在地</h2><table><tbody><tr><td>緯度</td><td>' + center.lat.toFixed(6)
             + '</td></tr><tr><td>経度</td><td>' + center.lng.toFixed(6)
-            + '</td></tr><tr><td>所在</td><td>' + json.name
+            + '</td></tr><tr><td>所在</td><td>' + json.map(i => i.name).join('<br>')
             + '</td></tr></tbody></table>';
           helloPopup.setContent(html).openOn(map);
-          if (json.area) {
-            group.clearLayers();
-            group.addLayer(L.geoJSON(JSON.parse('{"type":"FeatureCollection","features":[' + json.area + ']}'), {
-              style: {
-                color: '#ff0000',
-                weight: 1,
-                opacity: 0.5
+          group.clearLayers();
+          group.addLayer(
+            L.geoJSON(
+              JSON.parse('{"type":"FeatureCollection","features":[' + json.map(i => i.area).join(',') + ']}'),
+              {
+                style: { color: '#ff0000', weight: 1, opacity: 0.5 }
               }
-            }));
-            map.on('popupclose', function (event) {
-              group.clearLayers();
-            });
-          }
+            )
+          );
+          map.on('popupclose', () => group.clearLayers());
         });
       }).addTo(map);
     </script>
