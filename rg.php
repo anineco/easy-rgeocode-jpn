@@ -24,7 +24,7 @@ $sth->execute();
 $sth = null;
 
 $sql = <<<'EOS'
-SELECT code,name,ST_AsGeoJSON(area,14) AS area FROM gyosei
+SELECT code,name,ST_AsGeoJSON(area,8) AS area FROM gyosei
 LEFT JOIN city USING (code)
 WHERE ST_Contains(area,@pt)
 EOS;
