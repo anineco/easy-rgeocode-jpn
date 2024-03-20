@@ -38,7 +38,7 @@ inc/
 
 # added by anineco
 /00readme.txt
-/AdminiBoundary_CD.xlsx
+/AdminiBoundary_CD*.xlsx
 /easy-rgeocode-jpn_*/
 /temp/
 /N03-*

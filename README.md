@@ -23,20 +23,20 @@ https://map.jpn.org/share/rg.php?lat=緯度&lon=経度
 
 ### STEP 1. 入力データの入手
 
-作成済のデータ（[easy-rgeocode-jpn_20220101.zip](https://map.jpn.org/share/easy-rgeocode-jpn_20220101.zip)）も公開しているので、これを用いても良い。ダウンロードして適当なディレクトリで解凍すると、
+作成済のデータ（[easy-rgeocode-jpn_20240101.zip](https://map.jpn.org/share/easy-rgeocode-jpn_20240101.zip)）も公開しているので、これを用いても良い。ダウンロードして適当なディレクトリで解凍すると、
 * city.csv
 * x_NNN.sql（NNN=000〜の連番）
 
 が得られる。city.csvは行政区域コードと都道府県+市区町村名のCSVファイルである。
 
-また、x_NNN.sqlは行政区域の範囲のポリゴンデータをデータベースに挿入するSQLファイルである。各SQLファイルは、ファイルサイズが32MB以下になるように分割されているが、データベースの設定や負荷によっては受け付けられない。その場合は、ファイルサイズが16MB以下になるように分割して作成したデータ（[easy-rgeocode-jpn_20220101_small.zip](https://map.jpn.org/share/easy-rgeocode-jpn_20220101_small.zip)）を用意しているので、こちらを用いても良い。
+また、x_NNN.sqlは行政区域の範囲のポリゴンデータをデータベースに挿入するSQLファイルである。各SQLファイルは、ファイルサイズが32MB以下になるように分割されているが、データベースの設定や負荷によっては受け付けられない。その場合は、ファイルサイズが16MB以下になるように分割して作成したデータ（[easy-rgeocode-jpn_20240101_small.zip](https://map.jpn.org/share/easy-rgeocode-jpn_20240101_small.zip)）を用意しているので、こちらを用いても良い。
 
 ### STEP 2. 入力データの作成
 
 STEP 1.で作成済の入力データを入手した場合は、STEP 3.に進む。以下の作業はmacOSやLinuxのCUIで行う。
 
-まず、国土交通省の[国土数値情報ダウンロードサービス](https://nlftp.mlit.go.jp/ksj/)の行政区域（ポリゴン）のページに入り、全国のデータ（令和4年）と行政区域コード
-* N03-20220101_GML.zip
+まず、国土交通省の[国土数値情報ダウンロードサービス](https://nlftp.mlit.go.jp/ksj/)の行政区域（ポリゴン）のページに入り、全国のデータ（令和6年）と行政区域コード
+* N03-20240101_GML.zip
 * AdminiBoundary_CD.xlsx
 
 をダウンロードする。次にgencsv_city.pyを用いて、AdminiBoundary_CD.xlsxからcity.csvを作成する。gencsv_city.pyの実行にはpythonモジュールのopenpyxlが必要である。ない場合は次のコマンドでインストールする。
@@ -51,9 +51,9 @@ gencsv_city.pyを用いてcity.csvを作成する。
 
 次に、[geojsplit](https://www.npmjs.com/package/geojsplit)をインストールし、以下のコマンドを実行して、x_NNN.sql ファイルを作成する。
 ```
-unzip N03-20220101_GML.zip '*.geojson'
-SOURCE=N03-22_220101.geojson
-TARGET=easy-rgeocode-jpn_20220101
+unzip N03-20240101_GML.zip '*.geojson'
+SOURCE=N03-20240101.geojson
+TARGET=easy-rgeocode-jpn_20240101
 
 export NODE_OPTIONS="--max-old-space-size=5000"
 
