@@ -75,22 +75,22 @@ done | (cd $TARGET; ../bsplit.pl)
 ```
 ../bsplit.pl 16
 ```
-と実行すると16MBを超えないように分割される。
+と実行すると16MBを超えないように分割される。さくらインターネットの場合は、32MBではタイムアウトすることがあり、16MBに分割した方が良い。
 
 ### STEP 3. テーブルの作成
 
 次の SQLコマンドでテーブルを作成する。
 ```
-CREATE TABLE city (
- code SMALLINT UNSIGNED NOT NULL COMMENT '行政区域コード',
- name VARCHAR(255) NOT NULL COMMENT '都道府県+市区町村名'
+CREATE TABLE `city` (
+  `code` smallint unsigned NOT NULL COMMENT '行政区域コード',
+  `name` varchar(255) NOT NULL COMMENT '都道府県+市区町村名',
+  PRIMARY KEY (`code`)
 );
-CREATE TABLE gyosei (
- code SMALLINT UNSIGNED NOT NULL COMMENT '行政区域コード',
- area GEOMETRY NOT NULL /*!80003 SRID 4326 */ COMMENT '範囲'
+CREATE TABLE `gyosei` (
+  `code` smallint unsigned NOT NULL COMMENT '行政区域コード',
+  `area` polygon NOT NULL /*!80003 SRID 4326 */ COMMENT '範囲',
+  SPATIAL KEY `area` (`area`)
 );
-ALTER TABLE city ADD PRIMARY KEY (code);
-ALTER TABLE gyosei ADD SPATIAL KEY (area);
 ```
 
 なお、MySQL8の場合は、areaフィールドにSRID 4326を設定している（
