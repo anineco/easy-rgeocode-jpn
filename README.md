@@ -111,29 +111,26 @@ STEP 3.で作成したテーブルについて、city.csvと全てのx_NNN.sql�
 
 ### STEP 5. テスト
 
-次のSQLを実行する。
+次のSQLを実行する（MySQL8の場合）。
 ```
-SET @lon=140.084619;
-SET @lat=36.104638;
-SET @pt=ST_GeomFromText(CONCAT('POINT(',@lon,' ',@lat,')'),4326);
+SET @pt=ST_GeomFromText('POINT(140.084619 36.104638 )',4326,'axis-order=long-lat');
 SELECT code,name FROM gyosei LEFT JOIN city USING (code) WHERE ST_Contains(area,@pt);
 ```
 
-なお、MySQL8では、POINT中の@lonと@latの順番を入れ換える必要があり（
-https://dev.mysql.com/doc/refman/8.0/en/gis-wkt-functions.html#function_st-geomfromtext
-）、代わりに次のSQLを実行する。
+注：ST_GeomFromText() の第3引数の 'axis-order=long-lat' については、https://dev.mysql.com/doc/refman/8.0/ja/gis-wkt-functions.html を参照のこと。MySQL5、MariaDBの場合は第3引数は指定せず、次のSQLを実行する。
 ```
-SET @lon=140.084619;
-SET @lat=36.104638;
-SET @pt=ST_GeomFromText(CONCAT('POINT(',@lat,' ',@lon,')'),4326);
+SET @pt=ST_GeomFromText('POINT(140.084619 36.104638 )',4326);
 SELECT code,name FROM gyosei LEFT JOIN city USING (code) WHERE ST_Contains(area,@pt);
 ```
 
 結果が「8220 茨城県つくば市」と表示されればOK。
 
+なお、ST_Contains() は 0 または 1 を返す関数であるが、クエリに用いる際は真偽値として取り扱うこと。
+```ST_Contains(area,@pt)>0``` の様に取り扱うと、空間インデクスが利用されなくなり、実行速度が大幅に低下することがある。
+
 ## API用PHPの設置
 
-init.phpにデータベースへアクセスするための情報を記入し、rg.phpと共にWebサーバに設置する。MySQL8の場合、STEP 6.の注と同じ理由により、rg.phpの一部を書き換える必要がある。
+init.phpにデータベースへアクセスするための情報を記入し、rg.phpと共にWebサーバに設置する。MySQL8の場合、STEP 5.の注と同じ理由により、rg.phpの一部を書き換える必要がある。
 
 ### 参考URL
 * [MySQLでGISデータを扱う](https://qiita.com/onunu/items/59ef2c050b35773ced0d)
